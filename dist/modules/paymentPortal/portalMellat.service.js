@@ -78,6 +78,15 @@ let PortalMellatService = class PortalMellatService {
         if (body.ResCode == '0') {
             await this.verifyRequest(transaction, Number(body.SaleReferenceId));
         }
+        else {
+            const order = await this.repoOrder.findOne({
+                where: { uuid: transaction.order_id },
+            });
+            if (order) {
+                order.status = order_entity_1.Status.Failed;
+                await this.repoOrder.save(order);
+            }
+        }
     }
     async verifyRequest(transaction, saleReferenceId) {
         const portalResult = await new Promise((resolve) => {
@@ -110,13 +119,12 @@ let PortalMellatService = class PortalMellatService {
         }
         if (!portalResultError && (portalResultData === null || portalResultData === void 0 ? void 0 : portalResultData.resCode) == 0) {
             order.status = order_entity_1.Status.Successful;
-            await this.repoOrder.save(order);
             this.settlePayment(Number(transaction.id), saleReferenceId);
         }
         else {
-            await this.repoOrder.save(order);
             order.status = order_entity_1.Status.Failed;
         }
+        await this.repoOrder.save(order);
     }
     async settlePayment(transactionId, saleReferenceId) {
         const portalResult = await new Promise((resolve) => {
