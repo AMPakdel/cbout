@@ -122,13 +122,8 @@ class Mellat {
                 userName: this.config.username,
                 userPassword: this.config.password,
             };
-            console.log('--------------\n');
-            console.log(args);
             return this.client.bpVerifyRequest(args, (error, result) => {
                 if (error) {
-                    console.log('error:1--------------\n');
-                    console.log(error);
-                    console.log(error === null || error === void 0 ? void 0 : error.message);
                     return callback(error, null);
                 }
                 return callback(null, {

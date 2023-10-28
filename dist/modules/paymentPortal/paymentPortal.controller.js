@@ -21,14 +21,15 @@ let PaymentPortalController = class PaymentPortalController {
         return this.service.payRequest(uuid, body);
     }
     async portalRedirect(body, transaction_id) {
-        console.log('----------portal-redirect');
-        console.log(body);
-        console.log(transaction_id, ' -transaction_id');
         await this.service.handleRedirect(transaction_id, body);
         return { transaction_id };
     }
-    async transactionResult(body) {
-        return this.service.transactionResult(body);
+    async transactionResult(req, body) {
+        const { uuid, role } = req.payload;
+        if (!role.includes(user_entity_1.Role.NormalUser)) {
+            throw new common_1.ForbiddenException('only normal user has access to this method');
+        }
+        return this.service.transactionResult(body, uuid);
     }
 };
 tslib_1.__decorate([
@@ -53,11 +54,13 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", Promise)
 ], PaymentPortalController.prototype, "portalRedirect", null);
 tslib_1.__decorate([
-    (0, common_1.Get)('transaction-result'),
-    openapi.ApiResponse({ status: 200, type: require("../../entities/transaction.entity").Transaction }),
-    tslib_1.__param(0, (0, common_1.Body)()),
+    (0, common_1.Post)('transaction-result'),
+    (0, common_1.UseGuards)(jwt_get_payload_guard_1.JwtGetPayloadGuard),
+    openapi.ApiResponse({ status: 201 }),
+    tslib_1.__param(0, (0, common_1.Req)()),
+    tslib_1.__param(1, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [paymentPortal_dto_1.VerifyRequestDto]),
+    tslib_1.__metadata("design:paramtypes", [Object, paymentPortal_dto_1.VerifyRequestDto]),
     tslib_1.__metadata("design:returntype", Promise)
 ], PaymentPortalController.prototype, "transactionResult", null);
 PaymentPortalController = tslib_1.__decorate([
