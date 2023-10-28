@@ -176,9 +176,6 @@ let BasketService = class BasketService extends crud_1.CRUDService {
         }
         if (sort) {
             switch (sort) {
-                case 'newest':
-                    orders = orders.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-                    break;
                 case 'oldest':
                     orders = orders.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
                     break;
@@ -191,6 +188,9 @@ let BasketService = class BasketService extends crud_1.CRUDService {
                 default:
                     throw new common_1.BadRequestException('Invalid sort option');
             }
+        }
+        else {
+            orders = orders.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
         }
         if (filter) {
             Object.keys(filter).forEach((k) => {
