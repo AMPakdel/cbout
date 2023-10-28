@@ -42,7 +42,7 @@ let PortalMellatService = class PortalMellatService {
                 this.mellat.paymentRequest({
                     amount: transaction.amount,
                     orderId: transaction.id.toString(),
-                    callbackUrl: 'https://cipherland.ir/transaction/verifyresult/' +
+                    callbackUrl: 'https://cipherland.ir/api/v1/payment-portal/portal-redirect?transaction_id=' +
                         transaction.id.toString(),
                     payerId: order.user.phoneNumber,
                 }, (err, result) => {

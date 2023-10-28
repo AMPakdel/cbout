@@ -6,6 +6,7 @@ const openapi = require("@nestjs/swagger");
 const user_entity_1 = require("../../entities/user.entity");
 const jwt_get_payload_guard_1 = require("../auth/guards/jwt-get-payload.guard");
 const common_1 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
 const paymentPortal_dto_1 = require("./paymentPortal.dto");
 const paymentPortal_service_1 = require("./paymentPortal.service");
 let PaymentPortalController = class PaymentPortalController {
@@ -19,10 +20,11 @@ let PaymentPortalController = class PaymentPortalController {
         }
         return this.service.payRequest(uuid, body);
     }
-    async portalRedirect(body, saleOrderId, saleReferenceId) {
+    async portalRedirect(body, transaction_id, saleOrderId, saleReferenceId) {
         console.log('----------portal-redirect');
         console.log(body);
         console.log('----Query');
+        console.log(transaction_id, ' -transaction_id');
         console.log(saleOrderId, ' -and- ', saleReferenceId);
         return { message: 'Hello world!' };
     }
@@ -42,13 +44,15 @@ tslib_1.__decorate([
 ], PaymentPortalController.prototype, "payRequest", null);
 tslib_1.__decorate([
     (0, common_1.Post)('portal-redirect'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
     (0, common_1.Render)('portalRedirect'),
     openapi.ApiResponse({ status: 201 }),
     tslib_1.__param(0, (0, common_1.Body)()),
-    tslib_1.__param(1, (0, common_1.Query)('saleOrderId')),
-    tslib_1.__param(2, (0, common_1.Query)('saleReferenceId')),
+    tslib_1.__param(1, (0, common_1.Query)('transaction_id')),
+    tslib_1.__param(2, (0, common_1.Query)('saleOrderId')),
+    tslib_1.__param(3, (0, common_1.Query)('saleReferenceId')),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [Object, Object, Object]),
+    tslib_1.__metadata("design:paramtypes", [Object, String, Object, Object]),
     tslib_1.__metadata("design:returntype", Promise)
 ], PaymentPortalController.prototype, "portalRedirect", null);
 tslib_1.__decorate([
