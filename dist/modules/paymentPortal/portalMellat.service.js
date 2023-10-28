@@ -75,7 +75,7 @@ let PortalMellatService = class PortalMellatService {
         transaction.finalAmount = body.FinalAmount;
         transaction.saleReferenceId = body.SaleReferenceId;
         await this.repoTransaction.save(transaction);
-        if (body.resCode == '0') {
+        if (body.ResCode == '0') {
             await this.verifyRequest(transaction, Number(body.SaleReferenceId));
         }
     }
