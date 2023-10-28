@@ -9,6 +9,7 @@ INSERT INTO role(title,uuid) VALUES('superAdmin','d52a8c49-c439-4d2b-87d1-6d849e
 INSERT INTO role(title,uuid) VALUES('gozineshgar','39ece4a1-592d-4c44-8585-8f2e17e8b633');
 
 
+
 INSERT INTO user_roles(uuid,role_uuid,user_uuid) VALUES('a7f1d9bc-183c-496b-ad15-d7e956cabee1','39ece4a1-592d-4c44-8585-8f2e17e8b633','74754e81-20a6-49f7-a901-0b6c769669be');
 
 
