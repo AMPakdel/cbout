@@ -19,7 +19,18 @@ let PaymentPortalService = class PaymentPortalService {
         }
         throw new common_1.BadRequestException('invalid portal_id');
     }
-    async verifyRequest(body) {
+    async handleRedirect(transaction_id, body) {
+        const transaction = await this.repoTransaction.findOne({
+            where: { id: Number(transaction_id) },
+        });
+        if (!transaction) {
+            throw new common_1.NotFoundException('no transaction was found');
+        }
+        if (transaction.portal_id == 1) {
+            return this.portalMellatService.handleRedirect(transaction, body);
+        }
+    }
+    async transactionResult(body) {
         const { transaction_id } = body;
         const transaction = await this.repoTransaction.findOne({
             where: { id: transaction_id },
@@ -27,9 +38,7 @@ let PaymentPortalService = class PaymentPortalService {
         if (!(transaction === null || transaction === void 0 ? void 0 : transaction.portalRefId)) {
             throw new common_1.NotFoundException('no transaction was found');
         }
-        if (transaction.portal_id == 1) {
-            return this.portalMellatService.verifyRequest(transaction);
-        }
+        return transaction;
     }
 };
 PaymentPortalService = tslib_1.__decorate([

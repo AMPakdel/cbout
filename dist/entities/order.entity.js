@@ -8,6 +8,7 @@ const orderItems_entity_1 = require("./orderItems.entity");
 const user_entity_1 = require("./user.entity");
 var Status;
 (function (Status) {
+    Status["Pending"] = "Pending";
     Status["Successful"] = "Successful";
     Status["Failed"] = "Failed";
 })(Status = exports.Status || (exports.Status = {}));

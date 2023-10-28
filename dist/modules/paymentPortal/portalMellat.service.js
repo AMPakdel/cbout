@@ -70,13 +70,22 @@ let PortalMellatService = class PortalMellatService {
             portal_url: 'https://bpm.shaparak.ir/pgwchannel/startpay.mellat',
         };
     }
-    async verifyRequest(transaction) {
+    async handleRedirect(transaction, body) {
+        transaction.RedirectResponse = JSON.stringify(body);
+        transaction.finalAmount = body.FinalAmount;
+        transaction.saleReferenceId = body.SaleReferenceId;
+        await this.repoTransaction.save(transaction);
+        if (body.resCode == '0') {
+            await this.verifyRequest(transaction, Number(body.SaleReferenceId));
+        }
+    }
+    async verifyRequest(transaction, saleReferenceId) {
         const portalResult = await new Promise((resolve) => {
             try {
                 this.mellat.verifyPayment({
                     orderId: Number(transaction.id),
                     saleOrderId: Number(transaction.id),
-                    saleReferenceId: Number(transaction.portalRefId),
+                    saleReferenceId: saleReferenceId,
                 }, (err, result) => {
                     if (err) {
                         resolve({ error: err === null || err === void 0 ? void 0 : err.message, data: null });
@@ -93,30 +102,29 @@ let PortalMellatService = class PortalMellatService {
         const { error: portalResultError, data: portalResultData } = portalResult;
         transaction.VerifyResponse = JSON.stringify(portalResult);
         await this.repoTransaction.save(transaction);
-        const response = {
-            error: null,
-            portalResponseCode: null,
-            transaction,
-        };
-        if (portalResultError) {
-            response.error = portalResultError;
+        const order = await this.repoOrder.findOne({
+            where: { uuid: transaction.order_id },
+        });
+        if (!order) {
+            throw new common_1.BadRequestException('order not found!');
         }
-        else if ((portalResultData === null || portalResultData === void 0 ? void 0 : portalResultData.resCode) !== 0) {
-            response.error = 'transaction was failed!';
-            response.portalResponseCode = portalResultData === null || portalResultData === void 0 ? void 0 : portalResultData.resCode;
+        if (!portalResultError && (portalResultData === null || portalResultData === void 0 ? void 0 : portalResultData.resCode) == 0) {
+            order.status = order_entity_1.Status.Successful;
+            await this.repoOrder.save(order);
+            this.settlePayment(Number(transaction.id), saleReferenceId);
         }
         else {
-            this.settlePayment(Number(transaction.id), Number(transaction.portalRefId));
+            await this.repoOrder.save(order);
+            order.status = order_entity_1.Status.Failed;
         }
-        return response;
     }
-    async settlePayment(transactionId, portalRefId) {
+    async settlePayment(transactionId, saleReferenceId) {
         const portalResult = await new Promise((resolve) => {
             try {
                 this.mellat.settlePayment({
                     orderId: transactionId,
                     saleOrderId: transactionId,
-                    saleReferenceId: portalRefId,
+                    saleReferenceId,
                 }, (err, result) => {
                     if (err) {
                         resolve({ error: err === null || err === void 0 ? void 0 : err.message, data: null });

@@ -36,6 +36,10 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", Number)
 ], Transaction.prototype, "amount", void 0);
 tslib_1.__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    tslib_1.__metadata("design:type", Number)
+], Transaction.prototype, "finalAmount", void 0);
+tslib_1.__decorate([
     (0, typeorm_1.Column)({ enum: TransactonStatus, default: TransactonStatus.Created }),
     tslib_1.__metadata("design:type", String)
 ], Transaction.prototype, "status", void 0);
@@ -46,11 +50,19 @@ tslib_1.__decorate([
 tslib_1.__decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     tslib_1.__metadata("design:type", String)
+], Transaction.prototype, "saleReferenceId", void 0);
+tslib_1.__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    tslib_1.__metadata("design:type", String)
 ], Transaction.prototype, "responseCode", void 0);
 tslib_1.__decorate([
     (0, typeorm_1.Column)({ type: 'text', nullable: true }),
     tslib_1.__metadata("design:type", String)
 ], Transaction.prototype, "CreateResponse", void 0);
+tslib_1.__decorate([
+    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
+    tslib_1.__metadata("design:type", String)
+], Transaction.prototype, "RedirectResponse", void 0);
 tslib_1.__decorate([
     (0, typeorm_1.Column)({ type: 'text', nullable: true }),
     tslib_1.__metadata("design:type", String)

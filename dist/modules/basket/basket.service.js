@@ -127,7 +127,7 @@ let BasketService = class BasketService extends crud_1.CRUDService {
         const tracking_code = (0, crypto_1.randomInt)(1000000, 9999999);
         const order = this.repoOrder.create({
             description: createOrderDto.description,
-            status: order_entity_1.Status.Successful,
+            status: order_entity_1.Status.Pending,
             type: order_entity_1.Type.Purchase,
             discount_code: createOrderDto.discount_code,
             discountValue,

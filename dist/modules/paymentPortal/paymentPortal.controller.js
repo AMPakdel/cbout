@@ -20,16 +20,15 @@ let PaymentPortalController = class PaymentPortalController {
         }
         return this.service.payRequest(uuid, body);
     }
-    async portalRedirect(body, transaction_id, saleOrderId, saleReferenceId) {
+    async portalRedirect(body, transaction_id) {
         console.log('----------portal-redirect');
         console.log(body);
-        console.log('----Query');
         console.log(transaction_id, ' -transaction_id');
-        console.log(saleOrderId, ' -and- ', saleReferenceId);
-        return { message: 'Hello world!' };
+        await this.service.handleRedirect(transaction_id, body);
+        return { transaction_id };
     }
-    async verifyRequest(body) {
-        return this.service.verifyRequest(body);
+    async transactionResult(body) {
+        return this.service.transactionResult(body);
     }
 };
 tslib_1.__decorate([
@@ -49,20 +48,18 @@ tslib_1.__decorate([
     openapi.ApiResponse({ status: 201 }),
     tslib_1.__param(0, (0, common_1.Body)()),
     tslib_1.__param(1, (0, common_1.Query)('transaction_id')),
-    tslib_1.__param(2, (0, common_1.Query)('saleOrderId')),
-    tslib_1.__param(3, (0, common_1.Query)('saleReferenceId')),
     tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [Object, String, Object, Object]),
+    tslib_1.__metadata("design:paramtypes", [Object, String]),
     tslib_1.__metadata("design:returntype", Promise)
 ], PaymentPortalController.prototype, "portalRedirect", null);
 tslib_1.__decorate([
-    (0, common_1.Post)('verify-request'),
-    openapi.ApiResponse({ status: 201, type: Object }),
+    (0, common_1.Get)('transaction-result'),
+    openapi.ApiResponse({ status: 200, type: require("../../entities/transaction.entity").Transaction }),
     tslib_1.__param(0, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [paymentPortal_dto_1.VerifyRequestDto]),
     tslib_1.__metadata("design:returntype", Promise)
-], PaymentPortalController.prototype, "verifyRequest", null);
+], PaymentPortalController.prototype, "transactionResult", null);
 PaymentPortalController = tslib_1.__decorate([
     (0, common_1.Controller)({ path: '/payment-portal', version: '1' }),
     tslib_1.__metadata("design:paramtypes", [paymentPortal_service_1.PaymentPortalService])
