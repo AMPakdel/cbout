@@ -12,7 +12,7 @@ const _configs_1 = tslib_1.__importDefault(require("../../configs"));
 const config_1 = require("nestjs-xion/config");
 const products_entity_1 = require("../../entities/products.entity");
 const classification_entity_1 = require("../../entities/classification.entity");
-const test_entity_1 = require("../../entities/test.entity");
+const config_test_entity_1 = require("../../entities/config-test.entity");
 const test_question_entity_1 = require("../../entities/test-question.entity");
 const lessonPlan_entity_1 = require("../../entities/lessonPlan.entity");
 const video_entity_1 = require("../../entities/video.entity");
@@ -51,7 +51,7 @@ let ProductsService = class ProductsService extends crud_1.CRUDService {
         try {
             const product = await this.repo.findOne({
                 where: { uuid: productUuid, publication: { uuid: publicationUuid } },
-                relations: ['classification', 'lessonPlans', 'test'],
+                relations: ['classification', 'lessonPlans', 'configTest'],
             });
             if (!product) {
                 throw new common_1.BadRequestException('Product not found');
@@ -184,7 +184,7 @@ let ProductsService = class ProductsService extends crud_1.CRUDService {
     async getProduct(uuid) {
         const product = await this.repo.findOne({
             where: { uuid },
-            relations: ['classification', 'lessonPlans', 'test', 'publication'],
+            relations: ['classification', 'lessonPlans', 'configTest', 'publication'],
         });
         if (!product) {
             throw new common_1.BadRequestException('Product not found');
@@ -352,14 +352,10 @@ let ProductsService = class ProductsService extends crud_1.CRUDService {
     async deleteProduct(uuid) {
         const product = await this.repo.findOne({
             where: { uuid: uuid },
-            relations: ['test', 'lessonPlans'],
+            relations: ['configTest', 'lessonPlans'],
         });
         if (!product) {
             throw new common_1.BadRequestException('Product not found');
-        }
-        if (product && product.test) {
-            const testUuid = product.test.uuid;
-            await this.deleteTestQuestionsWithFiles(testUuid);
         }
         if (product && product.video) {
             const videoUuid = product.video.uuid;
@@ -494,7 +490,7 @@ ProductsService = tslib_1.__decorate([
     tslib_1.__param(1, (0, typeorm_2.InjectRepository)(products_entity_1.Products)),
     tslib_1.__param(2, (0, typeorm_2.InjectRepository)(classification_entity_1.Classification)),
     tslib_1.__param(3, (0, typeorm_2.InjectRepository)(institute_entity_1.InstituteOwner)),
-    tslib_1.__param(4, (0, typeorm_2.InjectRepository)(test_entity_1.Test)),
+    tslib_1.__param(4, (0, typeorm_2.InjectRepository)(config_test_entity_1.ConfigTest)),
     tslib_1.__param(5, (0, typeorm_2.InjectRepository)(test_question_entity_1.TestQuestion)),
     tslib_1.__param(6, (0, typeorm_2.InjectRepository)(lessonPlan_entity_1.LessonPlan)),
     tslib_1.__param(7, (0, typeorm_2.InjectRepository)(video_entity_1.Video)),

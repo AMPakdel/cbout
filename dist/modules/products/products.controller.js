@@ -22,8 +22,6 @@ let ProductsController = class ProductsController {
     async getAllInstituteProducts(req, body) {
         const institute = req.institute;
         const publication_uuid = institute.publication.uuid;
-        console.log('institute', institute);
-        console.log('publication', publication_uuid);
         const { search, sort, filter, page = 1 } = body;
         return this.productsService.getAllInstituteProducts(page, search, sort, filter, publication_uuid);
     }
@@ -74,7 +72,7 @@ let ProductsController = class ProductsController {
                 }
             }
         }
-        if (userRole === user_entity_1.Role.Institute) {
+        if (userRole === user_entity_1.Role.NormalUser) {
             return this.productsService.createProduct(dto, instituteOwnerUuid, files.picName && files.picName[0], files.bookPicName && files.bookPicName[0], files.bookFileName && files.bookFileName[0]);
         }
         else {
@@ -122,7 +120,7 @@ let ProductsController = class ProductsController {
                 }
             }
         }
-        if (userRole === user_entity_1.Role.Institute) {
+        if (userRole === user_entity_1.Role.NormalUser) {
             return this.productsService.updateProduct(uuid, dto, files.picName && files.picName[0], files.bookPicName && files.bookPicName[0], files.bookFileName && files.bookFileName[0]);
         }
         else {
@@ -131,7 +129,7 @@ let ProductsController = class ProductsController {
     }
     async deleteProduct(uuid, req) {
         const userRole = req.payload.role;
-        if (userRole === user_entity_1.Role.Institute) {
+        if (userRole === user_entity_1.Role.NormalUser) {
             return this.productsService.deleteProduct(uuid);
         }
         else {

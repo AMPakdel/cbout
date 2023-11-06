@@ -11,7 +11,7 @@ const typeorm_2 = require("@nestjs/typeorm");
 const _configs_1 = tslib_1.__importDefault(require("../../configs"));
 const config_1 = require("nestjs-xion/config");
 const test_question_entity_1 = require("../../entities/test-question.entity");
-const test_entity_1 = require("../../entities/test.entity");
+const config_test_entity_1 = require("../../entities/config-test.entity");
 const util_1 = require("util");
 const unlinkAsync = (0, util_1.promisify)(fs.unlink);
 const mkdirAsync = (0, util_1.promisify)(fs.mkdir);
@@ -68,7 +68,6 @@ let TestQuestionService = class TestQuestionService extends crud_1.CRUDService {
     }
     async createTestQuestion(dto, picName) {
         if (!dto.question ||
-            !dto.type ||
             !dto.choiceOne ||
             !dto.choiceTwo ||
             !dto.choiceThree ||
@@ -78,17 +77,17 @@ let TestQuestionService = class TestQuestionService extends crud_1.CRUDService {
             throw new common_1.BadRequestException('Required fields are missing');
         }
         const testUuid = dto.test_uuid;
-        const test = await this.repoTest.findOne({
+        const configTest = await this.repoTest.findOne({
             where: { uuid: testUuid },
         });
-        if (!test) {
+        if (!configTest) {
             throw new common_1.BadRequestException('Test not found');
         }
         if (!picName) {
-            const testQuestion = this.repo.create(Object.assign(Object.assign({}, dto), { test: test }));
+            const testQuestion = this.repo.create(Object.assign(Object.assign({}, dto), { configTest: configTest }));
             return await this.repo.save(testQuestion);
         }
-        const testQuestionData = Object.assign(Object.assign({}, dto), { test: test });
+        const testQuestionData = Object.assign(Object.assign({}, dto), { configTest: configTest });
         if (picName) {
             const fileExtension = picName.originalname.split('.').pop();
             const randomBytesLength = 8;
@@ -106,7 +105,6 @@ let TestQuestionService = class TestQuestionService extends crud_1.CRUDService {
     }
     async updateTestQuestion(uuid, dto, picName) {
         if (!dto.question ||
-            !dto.type ||
             !dto.choiceOne ||
             !dto.choiceTwo ||
             !dto.choiceThree ||
@@ -121,13 +119,13 @@ let TestQuestionService = class TestQuestionService extends crud_1.CRUDService {
             throw new common_1.BadRequestException('TestQuestion not found');
         }
         const testUuid = dto.test_uuid;
-        const test = await this.repoTest.findOne({
+        const configTest = await this.repoTest.findOne({
             where: { uuid: testUuid },
         });
-        if (!test) {
+        if (!configTest) {
             throw new common_1.BadRequestException('Test not found');
         }
-        existingTestQuestion.test = test;
+        existingTestQuestion.configTest = configTest;
         if (picName) {
             if (existingTestQuestion.picPath) {
                 try {
@@ -177,7 +175,7 @@ let TestQuestionService = class TestQuestionService extends crud_1.CRUDService {
 TestQuestionService = tslib_1.__decorate([
     (0, common_1.Injectable)(),
     tslib_1.__param(1, (0, typeorm_2.InjectRepository)(test_question_entity_1.TestQuestion)),
-    tslib_1.__param(2, (0, typeorm_2.InjectRepository)(test_entity_1.Test)),
+    tslib_1.__param(2, (0, typeorm_2.InjectRepository)(config_test_entity_1.ConfigTest)),
     tslib_1.__metadata("design:paramtypes", [config_1.ConfigService,
         typeorm_1.Repository,
         typeorm_1.Repository])

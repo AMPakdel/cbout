@@ -6,4 +6,6 @@ module.exports = {
     videoFilePath: './uploads/video',
     combinedPackageFilePath: './uploads/combinedPackage',
     pageFilePath: './uploads/page',
+    soundTestFilePath: './uploads/soundTest',
+    educatorFilePath: './uploads/educator',
 };

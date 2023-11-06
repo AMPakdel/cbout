@@ -17,7 +17,7 @@ let AdminProductsController = class AdminProductsController {
     }
     async getAllProductsAdmin(req, body) {
         const userRole = req.payload.role;
-        if (userRole === user_entity_1.Role.Institute) {
+        if (userRole === user_entity_1.Role.NormalUser) {
             const { search, sort, filter, page = 1 } = body;
             return this.productsService.getAllProducts(page, search, sort, filter);
         }
@@ -27,7 +27,7 @@ let AdminProductsController = class AdminProductsController {
     }
     async getProductAdmin(req, { uuid }) {
         const userRole = req.payload.role;
-        if (userRole === user_entity_1.Role.Institute) {
+        if (userRole === user_entity_1.Role.NormalUser) {
             return this.productsService.getProduct(uuid);
         }
         else {

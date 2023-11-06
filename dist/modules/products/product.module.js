@@ -9,7 +9,7 @@ const products_service_1 = require("./products.service");
 const products_entity_1 = require("./../../entities/products.entity");
 const classification_entity_1 = require("../../entities/classification.entity");
 const lessonPlan_entity_1 = require("../../entities/lessonPlan.entity");
-const test_entity_1 = require("../../entities/test.entity");
+const config_test_entity_1 = require("../../entities/config-test.entity");
 const test_question_entity_1 = require("../../entities/test-question.entity");
 const video_entity_1 = require("../../entities/video.entity");
 const combinedPackage_entity_1 = require("../../entities/combinedPackage.entity");
@@ -26,7 +26,7 @@ ProductsModule = tslib_1.__decorate([
                 classification_entity_1.Classification,
                 institute_entity_1.InstituteOwner,
                 lessonPlan_entity_1.LessonPlan,
-                test_entity_1.Test,
+                config_test_entity_1.ConfigTest,
                 test_question_entity_1.TestQuestion,
                 video_entity_1.Video,
                 combinedPackage_entity_1.CombinedPackage,

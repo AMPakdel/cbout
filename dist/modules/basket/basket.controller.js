@@ -10,6 +10,7 @@ const swagger_1 = require("@nestjs/swagger");
 const basket_service_1 = require("./basket.service");
 const basket_dto_1 = require("./basket.dto");
 const jwt_get_payload_guard_1 = require("../auth/guards/jwt-get-payload.guard");
+const user_entity_1 = require("../../entities/user.entity");
 let BasketController = class BasketController {
     constructor(basketService) {
         this.basketService = basketService;
@@ -36,6 +37,16 @@ let BasketController = class BasketController {
         const uuid = req.payload.uuid;
         const { search, sort, filter, page = 1 } = body;
         return this.basketService.getUserOrders(uuid, page, search, sort, filter);
+    }
+    async getAdminOrders(req, body) {
+        const userRole = req.payload.role;
+        if (userRole === user_entity_1.Role.Admin) {
+            const { search, sort, filter, page = 1 } = body;
+            return this.basketService.getAdminOrders(page, search, sort, filter);
+        }
+        else {
+            throw new common_1.BadRequestException('Permission denied');
+        }
     }
 };
 tslib_1.__decorate([
@@ -104,6 +115,19 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [Object, Object]),
     tslib_1.__metadata("design:returntype", Promise)
 ], BasketController.prototype, "getUserOrders", null);
+tslib_1.__decorate([
+    (0, common_1.Post)('/admin/orders'),
+    (0, common_1.UseGuards)(jwt_get_payload_guard_1.JwtGetPayloadGuard),
+    (0, common_1.UseInterceptors)(crud_1.CRUDInterceptor),
+    (0, swagger_1.ApiOperation)({ summary: 'Get user orders' }),
+    (0, decorator_1.ApiCrudQueries)(),
+    openapi.ApiResponse({ status: 201 }),
+    tslib_1.__param(0, (0, common_1.Request)()),
+    tslib_1.__param(1, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object, Object]),
+    tslib_1.__metadata("design:returntype", Promise)
+], BasketController.prototype, "getAdminOrders", null);
 BasketController = tslib_1.__decorate([
     (0, swagger_1.ApiTags)('Basket'),
     (0, common_1.Controller)({ path: '/basket', version: '1' }),

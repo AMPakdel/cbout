@@ -9,7 +9,7 @@ const common_1 = require("@nestjs/common");
 const typeorm_2 = require("@nestjs/typeorm");
 const _configs_1 = tslib_1.__importDefault(require("../../configs"));
 const config_1 = require("nestjs-xion/config");
-const test_entity_1 = require("../../entities/test.entity");
+const config_test_entity_1 = require("../../entities/config-test.entity");
 const products_entity_1 = require("../../entities/products.entity");
 const test_question_entity_1 = require("../../entities/test-question.entity");
 const util_1 = require("util");
@@ -47,11 +47,7 @@ let TestService = class TestService extends crud_1.CRUDService {
                         'uuid',
                         'question',
                         'type',
-                        'choiceOne',
-                        'choiceTwo',
-                        'choiceThree',
-                        'choiceFour',
-                        'trueChoice',
+                        'level',
                         'picName',
                         'picPath',
                         'test_uuid',
@@ -65,7 +61,7 @@ let TestService = class TestService extends crud_1.CRUDService {
     async getTest(uuid) {
         const test = await this.repo.findOne({
             where: { uuid },
-            relations: ['product', 'testQuestions'],
+            relations: ['product', 'testQuestions', 'testQuestions.answers'],
         });
         if (!test) {
             throw new common_1.BadRequestException('Test not found');
@@ -73,7 +69,7 @@ let TestService = class TestService extends crud_1.CRUDService {
         return test;
     }
     async createTest(dto) {
-        if (!dto.title || !dto.type || !dto.product_uuid) {
+        if (!dto.title || !dto.product_uuid) {
             throw new common_1.BadRequestException('Required fields are missing');
         }
         const productUuid = dto.product_uuid;
@@ -87,7 +83,7 @@ let TestService = class TestService extends crud_1.CRUDService {
         return await this.repo.save(test);
     }
     async updateTest(uuid, dto) {
-        if (!dto.title || !dto.type) {
+        if (!dto.title) {
             throw new common_1.BadRequestException('Required fields are missing');
         }
         const existingTest = await this.findOne({
@@ -143,7 +139,7 @@ let TestService = class TestService extends crud_1.CRUDService {
 };
 TestService = tslib_1.__decorate([
     (0, common_1.Injectable)(),
-    tslib_1.__param(1, (0, typeorm_2.InjectRepository)(test_entity_1.Test)),
+    tslib_1.__param(1, (0, typeorm_2.InjectRepository)(config_test_entity_1.ConfigTest)),
     tslib_1.__param(2, (0, typeorm_2.InjectRepository)(test_question_entity_1.TestQuestion)),
     tslib_1.__param(3, (0, typeorm_2.InjectRepository)(products_entity_1.Products)),
     tslib_1.__metadata("design:paramtypes", [config_1.ConfigService,

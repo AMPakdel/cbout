@@ -26,7 +26,7 @@ let JwtGetInstituteGuard = class JwtGetInstituteGuard {
             if (!payload || !payload.uuid || !payload.role) {
                 throw new common_1.UnauthorizedException('invalid token');
             }
-            if (!payload.role.includes(user_entity_1.Role.Institute)) {
+            if (!payload.role.includes(user_entity_1.Role.NormalUser)) {
                 throw new common_1.UnauthorizedException('Permission denied');
             }
             const institute = await this.instituteService.findOne({

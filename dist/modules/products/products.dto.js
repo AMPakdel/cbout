@@ -9,7 +9,7 @@ const products_entity_1 = require("../../entities/products.entity");
 const class_transformer_1 = require("class-transformer");
 class CreateProductsDTO {
     static _OPENAPI_METADATA_FACTORY() {
-        return { title: { required: true, type: () => String }, enrollments: { required: true, type: () => Number }, type: { required: true, enum: require("../../entities/products.entity").Type }, library: { required: true, enum: require("../../entities/products.entity").Library }, base_price: { required: true, type: () => Number }, min_price_in_discount: { required: true, type: () => Number }, price_in_library_subscription: { required: true, type: () => Number }, details: { required: true, type: () => String }, tags: { required: true, type: () => String }, isInLibrary: { required: true, type: () => Boolean }, release_date: { required: true, type: () => Date }, bookPages: { required: true, type: () => Number }, picName: { required: true, type: () => String }, bookPicName: { required: true, type: () => String }, bookFileName: { required: true, type: () => String }, classificationUuid: { required: true, type: () => String } };
+        return { title: { required: true, type: () => String }, enrollments: { required: true, type: () => Number }, type: { required: true, enum: require("../../entities/products.entity").Type }, test_type: { required: true, enum: require("../../entities/products.entity").TestType }, library: { required: true, enum: require("../../entities/products.entity").Library }, base_price: { required: true, type: () => Number }, min_price_in_discount: { required: true, type: () => Number }, price_in_library_subscription: { required: true, type: () => Number }, details: { required: true, type: () => String }, tags: { required: true, type: () => String }, isInLibrary: { required: true, type: () => Boolean }, release_date: { required: true, type: () => Date }, bookPages: { required: true, type: () => Number }, picName: { required: true, type: () => String }, bookPicName: { required: true, type: () => String }, bookFileName: { required: true, type: () => String }, classificationUuid: { required: true, type: () => String } };
     }
 }
 tslib_1.__decorate([
@@ -31,6 +31,12 @@ tslib_1.__decorate([
     (0, swagger_1.ApiProperty)({ enum: products_entity_1.Type, example: products_entity_1.Type.Course }),
     tslib_1.__metadata("design:type", String)
 ], CreateProductsDTO.prototype, "type", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(products_entity_1.TestType),
+    (0, swagger_1.ApiProperty)({ enum: products_entity_1.TestType, example: products_entity_1.TestType.IeltsGeneral }),
+    tslib_1.__metadata("design:type", String)
+], CreateProductsDTO.prototype, "test_type", void 0);
 tslib_1.__decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEnum)(products_entity_1.Library),

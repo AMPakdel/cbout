@@ -7,13 +7,13 @@ const typeorm_1 = require("@nestjs/typeorm");
 const test_service_1 = require("./test.service");
 const test_controller_1 = require("./test.controller");
 const products_entity_1 = require("./../../entities/products.entity");
-const test_entity_1 = require("../../entities/test.entity");
+const config_test_entity_1 = require("../../entities/config-test.entity");
 const test_question_entity_1 = require("../../entities/test-question.entity");
 let TestModule = class TestModule {
 };
 TestModule = tslib_1.__decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([products_entity_1.Products, test_entity_1.Test, test_question_entity_1.TestQuestion])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([products_entity_1.Products, config_test_entity_1.ConfigTest, test_question_entity_1.TestQuestion])],
         controllers: [test_controller_1.TestController],
         providers: [test_service_1.TestService],
     })

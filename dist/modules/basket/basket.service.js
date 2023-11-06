@@ -210,6 +210,51 @@ let BasketService = class BasketService extends crud_1.CRUDService {
         orders = orders.slice((page - 1) * per_page, page * per_page);
         return { data: orders, total };
     }
+    async getAdminOrders(page, search, sort, filter) {
+        const per_page = 20;
+        let orders = await this.repoOrder.find({
+            relations: ['orderItems'],
+        });
+        if (search) {
+            orders = orders.filter((order) => order.description &&
+                order.description.toLowerCase().includes(search.toLowerCase()));
+        }
+        if (sort) {
+            switch (sort) {
+                case 'oldest':
+                    orders = orders.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+                    break;
+                case 'most_expensive':
+                    orders = orders.sort((a, b) => b.final_price - a.final_price);
+                    break;
+                case 'least_expensive':
+                    orders = orders.sort((a, b) => a.final_price - b.final_price);
+                    break;
+                default:
+                    throw new common_1.BadRequestException('Invalid sort option');
+            }
+        }
+        else {
+            orders = orders.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        }
+        if (filter) {
+            Object.keys(filter).forEach((k) => {
+                orders = orders.filter((order) => {
+                    if (typeof filter[k] == 'string') {
+                        filter[k] = [filter[k]];
+                    }
+                    const key = k;
+                    if (Array.isArray(filter[k]) && order[key]) {
+                        return filter[k].includes(order[key]);
+                    }
+                    return false;
+                });
+            });
+        }
+        const total = orders.length;
+        orders = orders.slice((page - 1) * per_page, page * per_page);
+        return { data: orders, total };
+    }
 };
 BasketService = tslib_1.__decorate([
     (0, common_1.Injectable)(),

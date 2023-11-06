@@ -1,21 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Products = exports.Library = exports.Type = void 0;
+exports.Products = exports.Library = exports.TestType = exports.Type = void 0;
 const tslib_1 = require("tslib");
 const class_validator_1 = require("class-validator");
 const typeorm_1 = require("typeorm");
 const base_entity_1 = require("./base.entity");
 const classification_entity_1 = require("./classification.entity");
 const lessonPlan_entity_1 = require("./lessonPlan.entity");
-const test_entity_1 = require("./test.entity");
+const config_test_entity_1 = require("./config-test.entity");
 const video_entity_1 = require("./video.entity");
 const combinedPackage_entity_1 = require("./combinedPackage.entity");
 const publications_entity_1 = require("./publications.entity");
 var Type;
 (function (Type) {
     Type["Course"] = "Course";
-    Type["EducationalContent"] = "EducationalContent";
+    Type["EducationalContent"] = "Educational Content";
 })(Type = exports.Type || (exports.Type = {}));
+var TestType;
+(function (TestType) {
+    TestType["IeltsAcademic"] = "Ielts Academic";
+    TestType["IeltsGeneral"] = "Ielts General";
+    TestType["Tofel"] = "Tofel";
+})(TestType = exports.TestType || (exports.TestType = {}));
 var Library;
 (function (Library) {
     Library["None"] = "None";
@@ -43,6 +49,10 @@ tslib_1.__decorate([
     (0, typeorm_1.Column)(),
     tslib_1.__metadata("design:type", String)
 ], Products.prototype, "type", void 0);
+tslib_1.__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    tslib_1.__metadata("design:type", String)
+], Products.prototype, "test_type", void 0);
 tslib_1.__decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     tslib_1.__metadata("design:type", String)
@@ -118,10 +128,9 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", Object)
 ], Products.prototype, "lessonPlans", void 0);
 tslib_1.__decorate([
-    (0, typeorm_1.OneToOne)(() => test_entity_1.Test),
-    (0, typeorm_1.JoinColumn)({ name: 'test_uuid', referencedColumnName: 'uuid' }),
-    tslib_1.__metadata("design:type", Object)
-], Products.prototype, "test", void 0);
+    (0, typeorm_1.OneToMany)(() => config_test_entity_1.ConfigTest, (configTest) => configTest.product),
+    tslib_1.__metadata("design:type", Array)
+], Products.prototype, "configTest", void 0);
 tslib_1.__decorate([
     (0, typeorm_1.OneToOne)(() => video_entity_1.Video),
     (0, typeorm_1.JoinColumn)({ name: 'video_uuid', referencedColumnName: 'uuid' }),

@@ -11,7 +11,7 @@ const swagger_1 = require("@nestjs/swagger");
 const jwt_get_payload_guard_1 = require("../auth/guards/jwt-get-payload.guard");
 const test_service_1 = require("./test.service");
 const test_dto_1 = require("./test.dto");
-const test_entity_1 = require("../../entities/test.entity");
+const config_test_entity_1 = require("../../entities/config-test.entity");
 const user_entity_1 = require("../../entities/user.entity");
 let TestController = class TestController {
     constructor(testService) {
@@ -19,7 +19,7 @@ let TestController = class TestController {
     }
     async getAllTest(req, request) {
         const userRole = req.payload.role;
-        if (userRole === user_entity_1.Role.Admin) {
+        if (userRole === user_entity_1.Role.NormalUser) {
             return this.testService.getAllTests(request);
         }
         else {
@@ -28,7 +28,7 @@ let TestController = class TestController {
     }
     async getTest(req, { uuid }) {
         const userRole = req.payload.role;
-        if (userRole === user_entity_1.Role.Admin) {
+        if (userRole === user_entity_1.Role.NormalUser) {
             return this.testService.getTest(uuid);
         }
         else {
@@ -46,7 +46,7 @@ let TestController = class TestController {
     }
     async updateTest({ uuid }, req, dto) {
         const userRole = req.payload.role;
-        if (userRole === user_entity_1.Role.Admin) {
+        if (userRole === user_entity_1.Role.NormalUser) {
             return this.testService.updateTest(uuid, dto);
         }
         else {
@@ -55,7 +55,7 @@ let TestController = class TestController {
     }
     async deleteTest(uuid, req) {
         const userRole = req.payload.role;
-        if (userRole === user_entity_1.Role.Admin) {
+        if (userRole === user_entity_1.Role.NormalUser) {
             return this.testService.deleteTest(uuid);
         }
         else {
@@ -92,8 +92,8 @@ tslib_1.__decorate([
     (0, common_1.Post)(),
     (0, common_1.UseGuards)(jwt_get_payload_guard_1.JwtGetPayloadGuard),
     (0, swagger_1.ApiOperation)({ summary: 'Create a test' }),
-    (0, decorator_1.ApiStandardResponse)({ status: common_1.HttpStatus.CREATED, type: test_entity_1.Test }),
-    openapi.ApiResponse({ status: 201, type: require("../../entities/test.entity").Test }),
+    (0, decorator_1.ApiStandardResponse)({ status: common_1.HttpStatus.CREATED, type: config_test_entity_1.ConfigTest }),
+    openapi.ApiResponse({ status: 201, type: require("../../entities/config-test.entity").ConfigTest }),
     tslib_1.__param(0, (0, common_1.Request)()),
     tslib_1.__param(1, (0, common_1.Body)()),
     tslib_1.__metadata("design:type", Function),
@@ -105,7 +105,7 @@ tslib_1.__decorate([
     (0, common_1.UseGuards)(jwt_get_payload_guard_1.JwtGetPayloadGuard),
     (0, swagger_1.ApiOperation)({ summary: 'Update a test' }),
     (0, decorator_1.ApiStandardResponse)(),
-    openapi.ApiResponse({ status: 200, type: require("../../entities/test.entity").Test }),
+    openapi.ApiResponse({ status: 200, type: require("../../entities/config-test.entity").ConfigTest }),
     tslib_1.__param(0, (0, common_1.Param)()),
     tslib_1.__param(1, (0, common_1.Request)()),
     tslib_1.__param(2, (0, common_1.Body)()),

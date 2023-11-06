@@ -130,7 +130,7 @@ let AuthService = AuthService_1 = class AuthService {
         if (!uvcode) {
             throw new common_1.NotFoundException('invalid verification-code');
         }
-        const institute_data = Object.assign(Object.assign({}, data), { role: user_entity_1.Role.Institute, status: institute_entity_1.InstituteStatus.ApprovePending });
+        const institute_data = Object.assign(Object.assign({}, data), { role: user_entity_1.Role.NormalUser, status: institute_entity_1.InstituteStatus.ApprovePending });
         const institute = await this.instituteService.register(institute_data);
         this.logger.debug(`Institute [${institute}] registered`);
         return {

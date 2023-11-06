@@ -10,10 +10,12 @@ const app_constant_1 = require("../app/app.constant");
 const ticketing_entity_1 = require("./ticketing.entity");
 const basket_entity_1 = require("./basket.entity");
 const order_entity_1 = require("./order.entity");
+const config_test_entity_1 = require("./config-test.entity");
+const user_answers_entity_1 = require("./user-answers.entity");
+const academy_entity_1 = require("./academy.entity");
 var Role;
 (function (Role) {
     Role["NormalUser"] = "normalUser";
-    Role["Institute"] = "institute";
     Role["Admin"] = "admin";
     Role["SuperAdmin"] = "superAdmin";
 })(Role = exports.Role || (exports.Role = {}));
@@ -104,6 +106,18 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", String)
 ], User.prototype, "status", void 0);
 tslib_1.__decorate([
+    (0, typeorm_1.Column)({
+        nullable: true,
+    }),
+    tslib_1.__metadata("design:type", Number)
+], User.prototype, "audioCorrectAnswer", void 0);
+tslib_1.__decorate([
+    (0, typeorm_1.Column)({
+        nullable: true,
+    }),
+    tslib_1.__metadata("design:type", Number)
+], User.prototype, "audioWrongAnswer", void 0);
+tslib_1.__decorate([
     (0, typeorm_1.BeforeInsert)(),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", []),
@@ -126,6 +140,19 @@ tslib_1.__decorate([
     (0, typeorm_1.OneToMany)(() => user_roles_entity_1.UserRoles, (userRoles) => userRoles.user),
     tslib_1.__metadata("design:type", Array)
 ], User.prototype, "user_roles", void 0);
+tslib_1.__decorate([
+    (0, typeorm_1.OneToMany)(() => config_test_entity_1.ConfigTest, (configTest) => configTest.user),
+    tslib_1.__metadata("design:type", Array)
+], User.prototype, "configTest", void 0);
+tslib_1.__decorate([
+    (0, typeorm_1.OneToMany)(() => user_answers_entity_1.UserAnswers, (userAnswers) => userAnswers.user),
+    tslib_1.__metadata("design:type", Array)
+], User.prototype, "user_answers", void 0);
+tslib_1.__decorate([
+    (0, typeorm_1.OneToOne)(() => academy_entity_1.Academy),
+    (0, typeorm_1.JoinColumn)({ name: 'academy_uuid', referencedColumnName: 'uuid' }),
+    tslib_1.__metadata("design:type", Object)
+], User.prototype, "academy", void 0);
 User = tslib_1.__decorate([
     (0, typeorm_1.Entity)()
 ], User);
