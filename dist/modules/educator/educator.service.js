@@ -14,14 +14,16 @@ const user_entity_1 = require("../../entities/user.entity");
 const util_1 = require("util");
 const user_constant_1 = require("../user/user.constant");
 const crypto_1 = require("crypto");
+const fileChest_entity_1 = require("../../entities/fileChest.entity");
 const unlinkAsync = (0, util_1.promisify)(fs.unlink);
 const mkdirAsync = (0, util_1.promisify)(fs.mkdir);
 let EducatorService = class EducatorService extends crud_1.CRUDService {
-    constructor(config, repo, repoUser) {
+    constructor(config, repo, repoUser, repoFileChest) {
         super(repo);
         this.config = config;
         this.repo = repo;
         this.repoUser = repoUser;
+        this.repoFileChest = repoFileChest;
         this.filesConfig = this.config.get(_configs_1.default.Files);
         this.ensureDirectoryExists(this.filesConfig.educatorFilePath);
     }
@@ -37,17 +39,35 @@ let EducatorService = class EducatorService extends crud_1.CRUDService {
         return this.repo.findOne(options);
     }
     async createEducator(userUuid) {
-        const user = await this.repoUser.findOne({ where: { uuid: userUuid } });
+        const user = await this.repoUser.findOne({
+            where: { uuid: userUuid },
+            relations: ['academy'],
+        });
         if (!user) {
             throw new common_1.BadRequestException(user_constant_1.UserError.UserNotFound);
         }
-        const academy = new academy_entity_1.Academy();
-        academy.status = academy_entity_1.AcademyStatus.FillingInformation;
-        academy.step = academy_entity_1.Steps.FirstStep;
-        user.academy = academy;
-        const createdAcademy = await this.repo.save(academy);
-        await this.repoUser.save(user);
-        return createdAcademy.uuid;
+        const existingacademy = user.academy;
+        if (existingacademy) {
+            return {
+                hasAcademy: true,
+                academy: existingacademy,
+            };
+        }
+        else {
+            const fileChest = new fileChest_entity_1.FileChest();
+            await this.repoFileChest.save(fileChest);
+            const academy = new academy_entity_1.Academy();
+            academy.status = academy_entity_1.AcademyStatus.FillingInformation;
+            academy.step = academy_entity_1.Steps.FirstStep;
+            academy.fileChest = fileChest;
+            user.academy = academy;
+            const createdAcademy = await this.repo.save(academy);
+            await this.repoUser.save(user);
+            return {
+                hasAcademy: false,
+                academy: null,
+            };
+        }
     }
     async createPersonalInfo(userUuid, dto) {
         var _a;
@@ -193,7 +213,9 @@ EducatorService = tslib_1.__decorate([
     (0, common_1.Injectable)(),
     tslib_1.__param(1, (0, typeorm_2.InjectRepository)(academy_entity_1.Academy)),
     tslib_1.__param(2, (0, typeorm_2.InjectRepository)(user_entity_1.User)),
+    tslib_1.__param(3, (0, typeorm_2.InjectRepository)(fileChest_entity_1.FileChest)),
     tslib_1.__metadata("design:paramtypes", [config_1.ConfigService,
+        typeorm_1.Repository,
         typeorm_1.Repository,
         typeorm_1.Repository])
 ], EducatorService);

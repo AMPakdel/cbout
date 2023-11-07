@@ -8,4 +8,5 @@ module.exports = {
     pageFilePath: './uploads/page',
     soundTestFilePath: './uploads/soundTest',
     educatorFilePath: './uploads/educator',
+    courseFilePath: './uploads/course',
 };

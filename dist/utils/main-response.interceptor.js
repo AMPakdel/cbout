@@ -11,6 +11,7 @@ exports.MainResponseInterceptorWhiteList = [
     '/api/v1/user/publications/file',
     '/api/v1/soundTest/file',
     '/api/v1/educator/file',
+    '/api/v1/course/file',
     '/api/v1/payment-portal/portal-redirect',
 ];
 let MainResponseInterceptor = class MainResponseInterceptor {

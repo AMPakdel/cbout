@@ -36,6 +36,11 @@ tslib_1.__decorate([
 ], Ticketing.prototype, "related", void 0);
 tslib_1.__decorate([
     (0, class_validator_1.IsNotEmpty)(),
+    (0, typeorm_1.Column)({ generated: true }),
+    tslib_1.__metadata("design:type", Number)
+], Ticketing.prototype, "trackingCode", void 0);
+tslib_1.__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, typeorm_1.Column)(),
     tslib_1.__metadata("design:type", String)
 ], Ticketing.prototype, "importance", void 0);

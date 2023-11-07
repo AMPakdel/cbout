@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Academy = exports.Gender = exports.Type = exports.Steps = exports.AcademyStatus = void 0;
 const tslib_1 = require("tslib");
+const fileChest_entity_1 = require("./fileChest.entity");
 const typeorm_1 = require("typeorm");
 const base_entity_1 = require("./base.entity");
 var AcademyStatus;
@@ -204,6 +205,11 @@ tslib_1.__decorate([
     (0, typeorm_1.Column)({ enum: Steps }),
     tslib_1.__metadata("design:type", String)
 ], Academy.prototype, "step", void 0);
+tslib_1.__decorate([
+    (0, typeorm_1.OneToOne)(() => fileChest_entity_1.FileChest),
+    (0, typeorm_1.JoinColumn)({ name: 'fileChest_uuid', referencedColumnName: 'uuid' }),
+    tslib_1.__metadata("design:type", Object)
+], Academy.prototype, "fileChest", void 0);
 Academy = tslib_1.__decorate([
     (0, typeorm_1.Entity)()
 ], Academy);

@@ -13,6 +13,7 @@ const order_entity_1 = require("./order.entity");
 const config_test_entity_1 = require("./config-test.entity");
 const user_answers_entity_1 = require("./user-answers.entity");
 const academy_entity_1 = require("./academy.entity");
+const course_entity_1 = require("./course.entity");
 var Role;
 (function (Role) {
     Role["NormalUser"] = "normalUser";
@@ -136,6 +137,10 @@ tslib_1.__decorate([
     (0, typeorm_1.OneToMany)(() => order_entity_1.Order, (order) => order.user),
     tslib_1.__metadata("design:type", Array)
 ], User.prototype, "order", void 0);
+tslib_1.__decorate([
+    (0, typeorm_1.OneToMany)(() => course_entity_1.Course, (course) => course.user),
+    tslib_1.__metadata("design:type", Array)
+], User.prototype, "courses", void 0);
 tslib_1.__decorate([
     (0, typeorm_1.OneToMany)(() => user_roles_entity_1.UserRoles, (userRoles) => userRoles.user),
     tslib_1.__metadata("design:type", Array)

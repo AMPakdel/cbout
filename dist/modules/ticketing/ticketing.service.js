@@ -77,7 +77,9 @@ let TicketingService = class TicketingService extends crud_1.CRUDService {
         page = page || 1;
         if (search) {
             ticketings = ticketings.filter((ticketing) => ticketing.title &&
-                ticketing.title.toLowerCase().includes(search.toLowerCase()));
+                ticketing.title.toLowerCase().includes(search.toLowerCase()) ||
+                ticketing.trackingCode &&
+                    ticketing.trackingCode.toString().includes(search));
         }
         if (sort) {
             switch (sort) {

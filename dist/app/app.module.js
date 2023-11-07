@@ -32,6 +32,7 @@ const fileServing_module_1 = require("../modules/fileServing/fileServing.module"
 const paymentPortal_module_1 = require("../modules/paymentPortal/paymentPortal.module");
 const soundTest_module_1 = require("../modules/soundTest/soundTest.module");
 const educator_module_1 = require("../modules/educator/educator.module");
+const course_module_1 = require("../modules/course/course.module");
 let AppModule = class AppModule {
 };
 AppModule = tslib_1.__decorate([
@@ -47,6 +48,7 @@ AppModule = tslib_1.__decorate([
             auth_module_1.AuthModule,
             user_module_1.UserModule,
             educator_module_1.EducatorModule,
+            course_module_1.CourseModule,
             role_module_1.RoleModule,
             ticketing_module_1.TicketingModule,
             basket_module_1.BasketModule,

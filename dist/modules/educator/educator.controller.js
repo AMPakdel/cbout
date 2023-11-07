@@ -146,7 +146,7 @@ tslib_1.__decorate([
     (0, common_1.UseGuards)(jwt_get_payload_guard_1.JwtGetPayloadGuard),
     (0, swagger_1.ApiOperation)({ summary: 'Create an educator' }),
     (0, decorator_1.ApiStandardResponse)({ status: common_1.HttpStatus.CREATED, type: academy_entity_1.Academy }),
-    openapi.ApiResponse({ status: 201, type: String }),
+    openapi.ApiResponse({ status: 201, type: Object }),
     tslib_1.__param(0, (0, common_1.Request)()),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", [Object]),
