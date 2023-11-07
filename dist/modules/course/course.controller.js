@@ -329,7 +329,7 @@ tslib_1.__decorate([
 ], CourseController.prototype, "releaseCourse", null);
 CourseController = tslib_1.__decorate([
     (0, swagger_1.ApiTags)('Course'),
-    (0, common_1.Controller)({ path: '/course', version: '1' }),
+    (0, common_1.Controller)({ path: '/academy/course', version: '1' }),
     tslib_1.__metadata("design:paramtypes", [course_service_1.CourseService])
 ], CourseController);
 exports.CourseController = CourseController;
