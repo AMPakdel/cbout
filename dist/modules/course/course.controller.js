@@ -92,7 +92,7 @@ let CourseController = class CourseController {
     }
     async uploadCoverPic({ uuid }, req, files) {
         const userUuid = req.payload.uuid;
-        if (files.picName && files.picName[0]) {
+        if (files.file && files.file[0]) {
             const fileValidators = [
                 new common_1.MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 * 1024 }),
                 new common_1.FileTypeValidator({
@@ -100,16 +100,16 @@ let CourseController = class CourseController {
                 }),
             ];
             for (const validator of fileValidators) {
-                if (!validator.isValid(files.picName[0])) {
+                if (!validator.isValid(files.file[0])) {
                     throw new common_1.BadRequestException('File validation failed');
                 }
             }
         }
-        return this.courseService.uploadCoverPic(userUuid, uuid, files.picName && files.picName[0]);
+        return this.courseService.uploadCoverPic(userUuid, uuid, files.file && files.file[0]);
     }
     async uploadAdvVideo({ uuid }, req, files) {
         const userUuid = req.payload.uuid;
-        if (files.videoName && files.videoName[0]) {
+        if (files.file && files.file[0]) {
             const fileValidators = [
                 new common_1.MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 * 1024 }),
                 new common_1.FileTypeValidator({
@@ -117,12 +117,12 @@ let CourseController = class CourseController {
                 }),
             ];
             for (const validator of fileValidators) {
-                if (!validator.isValid(files.videoName[0])) {
+                if (!validator.isValid(files.file[0])) {
                     throw new common_1.BadRequestException('File validation failed');
                 }
             }
         }
-        return this.courseService.uploadAdvVideo(userUuid, uuid, files.videoName && files.videoName[0]);
+        return this.courseService.uploadAdvVideo(userUuid, uuid, files.file && files.file[0]);
     }
     async releaseCourse(req, { uuid }) {
         const userUuid = req.payload.uuid;
@@ -293,7 +293,7 @@ tslib_1.__decorate([
     (0, common_1.UseGuards)(jwt_get_payload_guard_1.JwtGetPayloadGuard),
     (0, swagger_1.ApiOperation)({ summary: 'Upload a pic for landing page' }),
     (0, decorator_1.ApiStandardResponse)(),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileFieldsInterceptor)([{ name: 'picName', maxCount: 1 }])),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileFieldsInterceptor)([{ name: 'file', maxCount: 1 }])),
     openapi.ApiResponse({ status: 200, type: Object }),
     tslib_1.__param(0, (0, common_1.Param)()),
     tslib_1.__param(1, (0, common_1.Request)()),
@@ -307,7 +307,7 @@ tslib_1.__decorate([
     (0, common_1.UseGuards)(jwt_get_payload_guard_1.JwtGetPayloadGuard),
     (0, swagger_1.ApiOperation)({ summary: 'Upload a video for landing page' }),
     (0, decorator_1.ApiStandardResponse)(),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileFieldsInterceptor)([{ name: 'videoName', maxCount: 1 }])),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileFieldsInterceptor)([{ name: 'file', maxCount: 1 }])),
     openapi.ApiResponse({ status: 200, type: Object }),
     tslib_1.__param(0, (0, common_1.Param)()),
     tslib_1.__param(1, (0, common_1.Request)()),

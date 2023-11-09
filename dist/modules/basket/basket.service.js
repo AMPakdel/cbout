@@ -70,6 +70,7 @@ let BasketService = class BasketService extends crud_1.CRUDService {
         const basketItem = this.repoBasketItems.create({
             courseDetails: {
                 title: dto.title || 'Untitled Course',
+                logo: dto.logo || '',
                 institute: dto.institute || 'Unknown Institute',
                 tutor: dto.tutor || 'Unknown Tutor',
                 duration: dto.duration || '00:00:00',

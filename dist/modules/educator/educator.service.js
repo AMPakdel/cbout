@@ -70,7 +70,6 @@ let EducatorService = class EducatorService extends crud_1.CRUDService {
         }
     }
     async createPersonalInfo(userUuid, dto) {
-        var _a;
         const user = await this.repoUser.findOne({
             where: { uuid: userUuid },
             relations: ['academy'],
@@ -79,21 +78,15 @@ let EducatorService = class EducatorService extends crud_1.CRUDService {
             if (!user) {
                 throw new common_1.BadRequestException(user_constant_1.UserError.UserNotFound);
             }
-            const academy = (_a = user.academy) === null || _a === void 0 ? void 0 : _a.uuid;
+            const academy = user.academy;
             if (!academy) {
                 throw new common_1.BadRequestException(`Academy not found for the user`);
             }
-            if (user.academy) {
-                user.academy.step = academy_entity_1.Steps.SecondStep;
-                await this.repo.update(academy, dto);
-                const updatedAcademy = await this.repo.findOne({
-                    where: { uuid: user.academy.uuid },
-                });
-                return updatedAcademy;
-            }
-            else {
-                throw new common_1.BadRequestException(`Academy not found for the user`);
-            }
+            await this.repo.update(academy.uuid, Object.assign(Object.assign({}, dto), { step: academy_entity_1.Steps.SecondStep }));
+            const updatedAcademy = await this.repo.findOne({
+                where: { uuid: academy.uuid },
+            });
+            return updatedAcademy;
         }
         catch (e) {
             console.log(e);
@@ -114,8 +107,7 @@ let EducatorService = class EducatorService extends crud_1.CRUDService {
             throw new common_1.BadRequestException(`Academy not found for the user`);
         }
         if (user.academy) {
-            user.academy.step = academy_entity_1.Steps.FourthStep;
-            await this.repo.update(academy, dto);
+            await this.repo.update(academy, Object.assign(Object.assign({}, dto), { step: academy_entity_1.Steps.FourthStep }));
             const updatedAcademy = await this.repo.findOne({
                 where: { uuid: academy },
             });
@@ -139,8 +131,7 @@ let EducatorService = class EducatorService extends crud_1.CRUDService {
             throw new common_1.BadRequestException(`Academy not found for the user`);
         }
         if (user.academy) {
-            user.academy.step = academy_entity_1.Steps.FifthStep;
-            await this.repo.update(academy, Object.assign(Object.assign({}, dto), { status: academy_entity_1.AcademyStatus.ApprovePending }));
+            await this.repo.update(academy, Object.assign(Object.assign({}, dto), { status: academy_entity_1.AcademyStatus.ApprovePending, step: academy_entity_1.Steps.FifthStep }));
             const updatedAcademy = await this.repo.findOne({
                 where: { uuid: academy },
             });
@@ -164,22 +155,6 @@ let EducatorService = class EducatorService extends crud_1.CRUDService {
         }
         if (user.academy) {
             user.academy.step = academy_entity_1.Steps.ThirdStep;
-            if (academy.type === academy_entity_1.Type.LegalPerson) {
-                if (!legalPersonLogoName ||
-                    !legalPersonCompanyArticle ||
-                    !legalPersonNewsPaper ||
-                    !chairmanIDPicName ||
-                    !chairmanBookletPicName) {
-                    throw new common_1.BadRequestException('Required fields for LegalPerson are missing');
-                }
-            }
-            else if (academy.type === academy_entity_1.Type.NaturalPerson) {
-                if (!naturalPersonPicName ||
-                    !naturalPersonIDPicName ||
-                    !naturalPersonBookletPicName) {
-                    throw new common_1.BadRequestException('Required fields for NaturalPerson are missing');
-                }
-            }
             const handleFileUpload = async (file, propertyName, propertyPath) => {
                 if (file) {
                     const fileExtension = file.originalname.split('.').pop();
@@ -188,7 +163,7 @@ let EducatorService = class EducatorService extends crud_1.CRUDService {
                     const randomFileName = `${randomString}.${fileExtension}`;
                     const filePath = `${this.filesConfig.educatorFilePath}/${randomFileName}`;
                     academy[propertyName] = randomFileName;
-                    academy[propertyPath] = `/academy/file/${randomFileName}`;
+                    academy[propertyPath] = `/file/educator/${randomFileName}`;
                     const fileStream = fs.createWriteStream(filePath);
                     fileStream.write(file.buffer);
                     fileStream.end();
