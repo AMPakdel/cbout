@@ -20,9 +20,8 @@ let SoundTestController = class SoundTestController {
     }
     async submitAnswer(req, submitAnswerDto) {
         const userUuid = req.payload.uuid;
-        const isCorrectAnswer = await this.soundTestService.checkAnswer(submitAnswerDto.soundTestId, submitAnswerDto.answer);
-        await this.soundTestService.incrementAnswerCount(userUuid, isCorrectAnswer);
-        return { isCorrectAnswer };
+        const result = await this.soundTestService.submitAnswer(userUuid, submitAnswerDto.soundTestId, submitAnswerDto.answer);
+        return result;
     }
 };
 tslib_1.__decorate([

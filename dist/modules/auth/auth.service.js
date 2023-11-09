@@ -15,14 +15,23 @@ const user_token_entity_1 = require("../../entities/user-token.entity");
 const typeorm_2 = require("@nestjs/typeorm");
 const user_verification_code_entity_1 = require("../../entities/user-verification-code.entity");
 const institute_entity_1 = require("../../entities/institute.entity");
+const log_activity_entity_1 = require("../../entities/log-activity.entity");
 let AuthService = AuthService_1 = class AuthService {
-    constructor(userTokenRepo, userVerificationCodeRepo, userService, instituteService, jwtService) {
+    constructor(userTokenRepo, userVerificationCodeRepo, logActivityRepository, userService, instituteService, jwtService) {
         this.userTokenRepo = userTokenRepo;
         this.userVerificationCodeRepo = userVerificationCodeRepo;
+        this.logActivityRepository = logActivityRepository;
         this.userService = userService;
         this.instituteService = instituteService;
         this.jwtService = jwtService;
         this.logger = new common_1.Logger(AuthService_1.name);
+    }
+    async logActivity(userUuid, action) {
+        const logActivity = this.logActivityRepository.create({
+            actions: action,
+            user: { uuid: userUuid },
+        });
+        await this.logActivityRepository.save(logActivity);
     }
     async userLoginWithCode(data) {
         const phoneNumber = data.phoneNumber;
@@ -35,6 +44,10 @@ let AuthService = AuthService_1 = class AuthService {
         });
         uvcode = await this.userVerificationCodeRepo.save(uvcode);
         this.logger.debug(`phoneNumber [${phoneNumber}] requested logind temp code`);
+        const user = await this.userService.findOne({ where: { phoneNumber } });
+        if (user) {
+            this.logActivity(user.uuid, log_activity_entity_1.LogActions.LoginWithCode);
+        }
         return phoneNumber;
     }
     async checkVerificationCode(phoneNumber, code) {
@@ -59,6 +72,7 @@ let AuthService = AuthService_1 = class AuthService {
             const user_obj = Object.assign({}, user);
             user_obj.role = [user.role];
             delete user_obj.password;
+            this.logActivity(user.uuid, log_activity_entity_1.LogActions.CheckVerificationCode);
             return {
                 shouldRegister: false,
                 token,
@@ -156,6 +170,7 @@ let AuthService = AuthService_1 = class AuthService {
         output_user.role = [user.role];
         delete output_user.password;
         this.logger.debug(`User [${user}] registered`);
+        this.logActivity(user.uuid, log_activity_entity_1.LogActions.Signup);
         return {
             token,
             user: output_user,
@@ -306,7 +321,9 @@ AuthService = AuthService_1 = tslib_1.__decorate([
     (0, common_1.Injectable)(),
     tslib_1.__param(0, (0, typeorm_2.InjectRepository)(user_token_entity_1.UserToken)),
     tslib_1.__param(1, (0, typeorm_2.InjectRepository)(user_verification_code_entity_1.UserVerificationCode)),
+    tslib_1.__param(2, (0, typeorm_2.InjectRepository)(log_activity_entity_1.LogActivity)),
     tslib_1.__metadata("design:paramtypes", [typeorm_1.Repository,
+        typeorm_1.Repository,
         typeorm_1.Repository,
         user_service_1.UserService,
         institute_service_1.InstituteService,

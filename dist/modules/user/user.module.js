@@ -10,11 +10,24 @@ const user_roles_entity_1 = require("../../entities/user-roles.entity");
 const role_module_1 = require("../role/role.module");
 const user_protected_controller_1 = require("../../platforms/admin/user.protected.controller");
 const role_entity_1 = require("../../entities/role.entity");
+const config_test_entity_1 = require("../../entities/config-test.entity");
+const answer_entity_1 = require("../../entities/answer.entity");
+const user_answers_entity_1 = require("../../entities/user-answers.entity");
 let UserModule = class UserModule {
 };
 UserModule = tslib_1.__decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([user_entity_1.User, role_entity_1.Role, user_roles_entity_1.UserRoles]), role_module_1.RoleModule],
+        imports: [
+            typeorm_1.TypeOrmModule.forFeature([
+                user_entity_1.User,
+                role_entity_1.Role,
+                user_roles_entity_1.UserRoles,
+                config_test_entity_1.ConfigTest,
+                answer_entity_1.Answer,
+                user_answers_entity_1.UserAnswers,
+            ]),
+            role_module_1.RoleModule,
+        ],
         providers: [user_service_1.UserService],
         exports: [user_service_1.UserService],
         controllers: [user_protected_controller_1.UsersController],

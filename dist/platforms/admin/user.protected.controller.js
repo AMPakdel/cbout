@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const tslib_1 = require("tslib");
 const openapi = require("@nestjs/swagger");
+const user_interface_1 = require("./../../modules/user/user.interface");
 const crud_1 = require("nestjs-xion/crud");
 const decorator_1 = require("nestjs-xion/decorator");
 const mime_types_1 = tslib_1.__importDefault(require("mime-types"));
@@ -22,6 +23,10 @@ const path_1 = require("path");
 let UsersController = class UsersController {
     constructor(userService) {
         this.userService = userService;
+    }
+    async AssignAnswerToUser(req, dto) {
+        const userUuid = req.payload.uuid;
+        return this.userService.assignAnswerToUser(userUuid, dto);
     }
     async getAllUsers(req, body) {
         const userRole = req.payload.role;
@@ -116,6 +121,18 @@ let UsersController = class UsersController {
         }
     }
 };
+tslib_1.__decorate([
+    (0, common_1.Patch)('answers'),
+    (0, common_1.UseGuards)(jwt_get_payload_guard_1.JwtGetPayloadGuard),
+    (0, swagger_1.ApiOperation)({ summary: 'set answer  to user question with answers' }),
+    (0, decorator_1.ApiStandardResponse)({ status: common_1.HttpStatus.CREATED }),
+    openapi.ApiResponse({ status: 200 }),
+    tslib_1.__param(0, (0, common_1.Request)()),
+    tslib_1.__param(1, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object, user_interface_1.AssignAnswerToUserDTO]),
+    tslib_1.__metadata("design:returntype", Promise)
+], UsersController.prototype, "AssignAnswerToUser", null);
 tslib_1.__decorate([
     (0, common_1.Post)(),
     (0, common_1.UseGuards)(jwt_get_payload_guard_1.JwtGetPayloadGuard),

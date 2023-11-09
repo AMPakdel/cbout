@@ -26,6 +26,10 @@ let TestController = class TestController {
             throw new common_1.BadRequestException('Permission denied');
         }
     }
+    getIELTSInfo() {
+        const ieltsInfo = this.testService.getIELTSInfo();
+        return ieltsInfo;
+    }
     async getTest(req, { uuid }) {
         const userRole = req.payload.role;
         if (userRole === user_entity_1.Role.NormalUser) {
@@ -76,6 +80,14 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [Object, Object]),
     tslib_1.__metadata("design:returntype", Promise)
 ], TestController.prototype, "getAllTest", null);
+tslib_1.__decorate([
+    (0, common_1.Get)('ieltsInfo'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get IELTS Exam Information' }),
+    openapi.ApiResponse({ status: 200, type: Object }),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", []),
+    tslib_1.__metadata("design:returntype", void 0)
+], TestController.prototype, "getIELTSInfo", null);
 tslib_1.__decorate([
     (0, common_1.Get)(':uuid'),
     (0, common_1.UseGuards)(jwt_get_payload_guard_1.JwtGetPayloadGuard),

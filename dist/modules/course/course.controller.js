@@ -28,6 +28,11 @@ let CourseController = class CourseController {
     async getCourse({ uuid }) {
         return this.courseService.getCourse(uuid);
     }
+    async getAllTicketings(req, body) {
+        const userUuid = req.payload.uuid;
+        const { search, sort, filter, page = 1 } = body;
+        return this.courseService.getAllTicketings(userUuid, page, search, sort, filter);
+    }
     async createCourse(req) {
         const userUuid = req.payload.uuid;
         return this.courseService.createCourse(userUuid);
@@ -167,6 +172,19 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [dto_1.UUIDParamDTO]),
     tslib_1.__metadata("design:returntype", Promise)
 ], CourseController.prototype, "getCourse", null);
+tslib_1.__decorate([
+    (0, common_1.Post)('all'),
+    (0, common_1.UseGuards)(jwt_get_payload_guard_1.JwtGetPayloadGuard),
+    (0, decorator_1.ApiCrudQueries)(),
+    (0, common_1.UseInterceptors)(crud_1.CRUDInterceptor),
+    (0, swagger_1.ApiOperation)({ summary: 'Get all courses' }),
+    openapi.ApiResponse({ status: 201 }),
+    tslib_1.__param(0, (0, common_1.Request)()),
+    tslib_1.__param(1, (0, common_1.Body)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object, Object]),
+    tslib_1.__metadata("design:returntype", Promise)
+], CourseController.prototype, "getAllTicketings", null);
 tslib_1.__decorate([
     (0, common_1.Post)(),
     (0, common_1.UseGuards)(jwt_get_payload_guard_1.JwtGetPayloadGuard),

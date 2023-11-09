@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = exports.UserStatus = exports.Role = void 0;
 const tslib_1 = require("tslib");
+const log_activity_entity_1 = require("./log-activity.entity");
 const bcrypt_1 = require("bcrypt");
 const typeorm_1 = require("typeorm");
 const base_entity_1 = require("./base.entity");
@@ -119,6 +120,10 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", Number)
 ], User.prototype, "audioWrongAnswer", void 0);
 tslib_1.__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    tslib_1.__metadata("design:type", Date)
+], User.prototype, "sendDateUserAnswer", void 0);
+tslib_1.__decorate([
     (0, typeorm_1.BeforeInsert)(),
     tslib_1.__metadata("design:type", Function),
     tslib_1.__metadata("design:paramtypes", []),
@@ -153,6 +158,10 @@ tslib_1.__decorate([
     (0, typeorm_1.OneToMany)(() => user_answers_entity_1.UserAnswers, (userAnswers) => userAnswers.user),
     tslib_1.__metadata("design:type", Array)
 ], User.prototype, "user_answers", void 0);
+tslib_1.__decorate([
+    (0, typeorm_1.OneToMany)(() => log_activity_entity_1.LogActivity, (logActivity) => logActivity.user),
+    tslib_1.__metadata("design:type", Array)
+], User.prototype, "logActivity", void 0);
 tslib_1.__decorate([
     (0, typeorm_1.OneToOne)(() => academy_entity_1.Academy),
     (0, typeorm_1.JoinColumn)({ name: 'academy_uuid', referencedColumnName: 'uuid' }),

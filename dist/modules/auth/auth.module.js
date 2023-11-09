@@ -13,12 +13,13 @@ const institute_module_1 = require("../institute/institute.module");
 const typeorm_1 = require("@nestjs/typeorm");
 const user_token_entity_1 = require("../../entities/user-token.entity");
 const user_verification_code_entity_1 = require("../../entities/user-verification-code.entity");
+const log_activity_entity_1 = require("../../entities/log-activity.entity");
 let AuthModule = class AuthModule {
 };
 AuthModule = tslib_1.__decorate([
     (0, common_1.Module)({
         imports: [
-            typeorm_1.TypeOrmModule.forFeature([user_token_entity_1.UserToken, user_verification_code_entity_1.UserVerificationCode]),
+            typeorm_1.TypeOrmModule.forFeature([user_token_entity_1.UserToken, user_verification_code_entity_1.UserVerificationCode, log_activity_entity_1.LogActivity]),
             user_module_1.UserModule,
             institute_module_1.InstituteModule,
             role_module_1.RoleModule,

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthPublicController = void 0;
 const tslib_1 = require("tslib");
 const openapi = require("@nestjs/swagger");
+const log_activity_entity_1 = require("./../../entities/log-activity.entity");
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const auth_service_1 = require("./auth.service");
@@ -36,6 +37,10 @@ let AuthPublicController = class AuthPublicController {
     }
     async registerInstitute(dto) {
         return this.service.registerInstitute(dto);
+    }
+    async signOut(req) {
+        const userUuid = req.payload.uuid;
+        this.service.logActivity(userUuid, log_activity_entity_1.LogActions.Logout);
     }
     async verifyToken(req) {
         const { authorization } = req.headers;
@@ -116,6 +121,16 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [register_dto_1.InstituteRegisterDTO]),
     tslib_1.__metadata("design:returntype", Promise)
 ], AuthPublicController.prototype, "registerInstitute", null);
+tslib_1.__decorate([
+    (0, common_1.Post)('sign-out'),
+    (0, common_1.UseGuards)(jwt_get_payload_guard_1.JwtGetPayloadGuard),
+    (0, swagger_1.ApiOperation)({ summary: 'Sign out of the system' }),
+    openapi.ApiResponse({ status: 201 }),
+    tslib_1.__param(0, (0, common_1.Request)()),
+    tslib_1.__metadata("design:type", Function),
+    tslib_1.__metadata("design:paramtypes", [Object]),
+    tslib_1.__metadata("design:returntype", Promise)
+], AuthPublicController.prototype, "signOut", null);
 tslib_1.__decorate([
     (0, common_1.Get)('user/verify-token'),
     (0, swagger_1.ApiOperation)({ summary: 'Validatation token' }),

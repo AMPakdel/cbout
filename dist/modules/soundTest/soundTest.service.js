@@ -44,11 +44,25 @@ let SoundTestService = class SoundTestService extends crud_1.CRUDService {
         };
     }
     getRandomAnimalNames(selectedAnimalName) {
-        const animals = ['Lion', 'Elephant', 'Horse', 'Bear', 'Bird', 'Cat', 'Dog', 'Dolphin', 'Cow', 'Wolf'];
+        const animals = [
+            'Lion',
+            'Elephant',
+            'Horse',
+            'Bear',
+            'Bird',
+            'Cat',
+            'Dog',
+            'Dolphin',
+            'Cow',
+            'Wolf',
+        ];
         const filteredAnimals = animals.filter((animal) => animal !== selectedAnimalName);
         for (let i = filteredAnimals.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [filteredAnimals[i], filteredAnimals[j]] = [filteredAnimals[j], filteredAnimals[i]];
+            [filteredAnimals[i], filteredAnimals[j]] = [
+                filteredAnimals[j],
+                filteredAnimals[i],
+            ];
         }
         return filteredAnimals.slice(0, 2);
     }
@@ -70,6 +84,29 @@ let SoundTestService = class SoundTestService extends crud_1.CRUDService {
             }
             await this.repoUser.save(user);
         }
+    }
+    async submitAnswer(userUuid, soundTestId, userAnswer) {
+        const isCorrectAnswer = await this.checkAnswer(soundTestId, userAnswer);
+        await this.incrementAnswerCount(userUuid, isCorrectAnswer);
+        const user = await this.repoUser.findOne({ where: { uuid: userUuid } });
+        if (!user) {
+            throw new common_1.BadRequestException('User not found');
+        }
+        if (!isCorrectAnswer && user.audioWrongAnswer <= 3) {
+            return {
+                isCorrectAnswer,
+                alloweToTest: false,
+                message: 'Your answer is incorrect.',
+            };
+        }
+        if (!isCorrectAnswer && user.audioWrongAnswer > 3) {
+            return {
+                isCorrectAnswer,
+                alloweToTest: false,
+                message: 'Support will call you',
+            };
+        }
+        return { isCorrectAnswer, alloweToTest: true };
     }
 };
 SoundTestService = tslib_1.__decorate([

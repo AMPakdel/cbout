@@ -17,7 +17,7 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", String)
 ], UserAnswers.prototype, "user_uuid", void 0);
 tslib_1.__decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)('simple-array'),
     tslib_1.__metadata("design:type", String)
 ], UserAnswers.prototype, "answer_uuid", void 0);
 tslib_1.__decorate([
@@ -27,7 +27,7 @@ tslib_1.__decorate([
 ], UserAnswers.prototype, "user", void 0);
 tslib_1.__decorate([
     (0, typeorm_1.ManyToOne)(() => answer_entity_1.Answer, (answer) => answer.user_answers),
-    (0, typeorm_1.JoinColumn)({ name: 'answer_uuid' }),
+    (0, typeorm_1.JoinColumn)({ name: 'answerUuid' }),
     tslib_1.__metadata("design:type", answer_entity_1.Answer)
 ], UserAnswers.prototype, "answer", void 0);
 UserAnswers = tslib_1.__decorate([

@@ -122,6 +122,18 @@ let CourseService = class CourseService extends crud_1.CRUDService {
             steps.price === course_entity_1.Steps.Completed &&
             steps.messages === course_entity_1.Steps.Completed);
     }
+    async getAllTicketings(userUuid, page, _search, _sort, _filter) {
+        const user = await this.findUserWithCourses(userUuid);
+        if (!user.courses) {
+            throw new common_1.BadRequestException(`There is no course for this user`);
+        }
+        const per_page = 20;
+        page = page || 1;
+        let courses = user.courses || [];
+        const total = courses.length;
+        courses = courses.slice((page - 1) * per_page, page * per_page);
+        return { data: courses, total };
+    }
     async getCourse(uuid) {
         const course = await this.repo.findOne({
             where: { uuid },

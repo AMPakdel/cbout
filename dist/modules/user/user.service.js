@@ -15,12 +15,18 @@ const fs = tslib_1.__importStar(require("fs"));
 const util_1 = require("util");
 const bcrypt_1 = require("bcrypt");
 const role_entity_1 = require("../../entities/role.entity");
+const config_test_entity_1 = require("../../entities/config-test.entity");
+const answer_entity_1 = require("../../entities/answer.entity");
+const user_answers_entity_1 = require("../../entities/user-answers.entity");
 const unlinkAsync = (0, util_1.promisify)(fs.unlink);
 const mkdirAsync = (0, util_1.promisify)(fs.mkdir);
 let UserService = class UserService extends crud_1.CRUDService {
-    constructor(repo, repoUserRole, repoRole, roleService) {
+    constructor(repo, repoConfigTest, answerRepository, userAnswerRepository, repoUserRole, repoRole, roleService) {
         super(repo);
         this.repo = repo;
+        this.repoConfigTest = repoConfigTest;
+        this.answerRepository = answerRepository;
+        this.userAnswerRepository = userAnswerRepository;
         this.repoUserRole = repoUserRole;
         this.repoRole = repoRole;
         this.roleService = roleService;
@@ -252,13 +258,61 @@ let UserService = class UserService extends crud_1.CRUDService {
             return role ? { roleId: userRole.role_uuid, title: role.title } : null;
         })).then((titles) => titles.filter(Boolean));
     }
+    async assignAnswerToUser(userUuid, dto) {
+        try {
+            const { answers, configTestUuid } = dto;
+            const user = await this.repo.findOne({ where: { uuid: userUuid } });
+            if (!user) {
+                throw new common_1.BadRequestException('User not found');
+            }
+            const configTest = await this.repoConfigTest.findOne({
+                where: { uuid: configTestUuid },
+            });
+            if (!configTest) {
+                throw new common_1.BadRequestException('ConfigTest not found');
+            }
+            if (!user.configTest) {
+                user.configTest = [];
+            }
+            user.configTest.push(configTest);
+            user.sendDateUserAnswer = new Date();
+            const answerArray = answers;
+            for (const questionId in answerArray) {
+                const answerId = answers[questionId];
+                const answerIds = Array.isArray(answerId) ? answerId : [answerId];
+                for (const answerId of answerIds) {
+                    const answer = await this.answerRepository.findOne({
+                        where: { uuid: answerId },
+                    });
+                    if (!answer) {
+                        throw new common_1.NotFoundException(`Answer not found for question ID: ${questionId}`);
+                    }
+                }
+                const userAnswer = new user_answers_entity_1.UserAnswers();
+                userAnswer.user = user;
+                userAnswer.answer_uuid = answerIds;
+                await this.userAnswerRepository.save(userAnswer);
+            }
+            await this.repo.save(user);
+        }
+        catch (error) {
+            console.error('An error occurred:', error);
+            throw new common_1.BadRequestException('An error occurred while processing the request');
+        }
+    }
 };
 UserService = tslib_1.__decorate([
     (0, common_1.Injectable)(),
     tslib_1.__param(0, (0, typeorm_2.InjectRepository)(user_entity_1.User)),
-    tslib_1.__param(1, (0, typeorm_2.InjectRepository)(user_roles_entity_1.UserRoles)),
-    tslib_1.__param(2, (0, typeorm_2.InjectRepository)(role_entity_1.Role)),
+    tslib_1.__param(1, (0, typeorm_2.InjectRepository)(config_test_entity_1.ConfigTest)),
+    tslib_1.__param(2, (0, typeorm_2.InjectRepository)(answer_entity_1.Answer)),
+    tslib_1.__param(3, (0, typeorm_2.InjectRepository)(user_answers_entity_1.UserAnswers)),
+    tslib_1.__param(4, (0, typeorm_2.InjectRepository)(user_roles_entity_1.UserRoles)),
+    tslib_1.__param(5, (0, typeorm_2.InjectRepository)(role_entity_1.Role)),
     tslib_1.__metadata("design:paramtypes", [typeorm_1.Repository,
+        typeorm_1.Repository,
+        typeorm_1.Repository,
+        typeorm_1.Repository,
         typeorm_1.Repository,
         typeorm_1.Repository,
         role_service_1.RoleService])
