@@ -22,7 +22,7 @@ let TestService = class TestService extends crud_1.CRUDService {
         this.repoTestQuestion = repoTestQuestion;
         this.repoProducts = repoProducts;
         this.filesConfig = this.config.get(_configs_1.default.Files);
-        const ieltsInfoData = fs.readFileSync('src/modules/test/ieltsTestInfo.config.json', 'utf-8');
+        const ieltsInfoData = fs.readFileSync('./ieltsTestInfo.config.json', 'utf-8');
         this.ieltsInfo = JSON.parse(ieltsInfoData);
     }
     async findOne(options) {
