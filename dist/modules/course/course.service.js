@@ -204,10 +204,12 @@ let CourseService = class CourseService extends crud_1.CRUDService {
         course.discountActivation = dto.discountActivation;
         course.basePrice = dto.basePrice;
         if (dto.discountActivation) {
+            course.discountStartDate = dto.discountStartDate;
             course.discountDueDate = dto.discountDueDate;
             course.discountPrice = dto.discountPrice;
         }
         else {
+            course.discountStartDate = '';
             course.discountDueDate = '';
             course.discountPrice = 0;
         }
@@ -246,7 +248,7 @@ let CourseService = class CourseService extends crud_1.CRUDService {
             const filePath = `${this.filesConfig.courseFilePath}/${randomFileName}`;
             const courseContent = new courseContent_entity_1.CourseContent();
             courseContent.fileName = randomFileName;
-            courseContent.filePath = `/course/file/${randomFileName}`;
+            courseContent.filePath = `/file/course/${randomFileName}`;
             courseContent.fileOriginalName = file.originalname;
             courseContent.extension = fileExtension || '';
             courseContent.size = file.size || 0;
@@ -277,7 +279,7 @@ let CourseService = class CourseService extends crud_1.CRUDService {
             const randomFileName = `${randomString}.${fileExtension}`;
             const filePath = `${this.filesConfig.courseFilePath}/${randomFileName}`;
             course.coverPicName = randomFileName;
-            course.coverPicPath = `/course/file/${randomFileName}`;
+            course.coverPicPath = `/file/course/${randomFileName}`;
             const fileStream = fs.createWriteStream(filePath);
             fileStream.write(picName.buffer);
             fileStream.end();
@@ -299,7 +301,7 @@ let CourseService = class CourseService extends crud_1.CRUDService {
             const randomFileName = `${randomString}.${fileExtension}`;
             const filePath = `${this.filesConfig.courseFilePath}/${randomFileName}`;
             course.advVideoName = randomFileName;
-            course.advVideoPath = `/course/file/${randomFileName}`;
+            course.advVideoPath = `/file/course/${randomFileName}`;
             const fileStream = fs.createWriteStream(filePath);
             fileStream.write(fileName.buffer);
             fileStream.end();
